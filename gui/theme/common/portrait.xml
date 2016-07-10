@@ -168,7 +168,7 @@
 
 			<text style="text_l">
 				<placement x="%col1_x_header%" y="%row3_header_y%"/>
-				<text>{@twrp_header=Team Win Recovery Project}</text>
+				<text>{@twrp_header=Martin's MR Recovery Project}</text>
 			</text>
 
 			<text style="text_m">
