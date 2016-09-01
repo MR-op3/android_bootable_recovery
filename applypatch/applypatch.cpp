@@ -457,6 +457,9 @@ int WriteToPartition(const unsigned char* data, size_t len, const char* target) 
                     printf("failed to seek back to beginning of %s: %s\n",
                            partition, strerror(errno));
                     return -1;
+                } else if (read_count == 0) {
+                    printf("verify read reached unexpected EOF, %s at %zu\n", partition, p);
+                    return -1;
                 }
                 unsigned char buffer[4096];
                 start = len;
