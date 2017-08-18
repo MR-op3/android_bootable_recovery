@@ -1075,12 +1075,12 @@ void MultiROM::restoreMounts()
 
 	sync();
 
-	// Is this really needed and entirely safe
-	KillProcessesUsingPath("/cache");
-	KillProcessesUsingPath("/system");
-	KillProcessesUsingPath("/data");
-	KillProcessesUsingPath("/realdata");
-	LOGINFO("KillProcessesUsingPath /realdata (rc=%d)\n", rc);
+	if (1) { // (DataManager::GetIntValue("tw_multirom_InstallZIP_ForceUnmount") == 1) {
+		KillProcessesUsingPath("/cache");
+		KillProcessesUsingPath("/system");
+		KillProcessesUsingPath("/data");
+		KillProcessesUsingPath("/realdata");
+	}
 
 	sync();
 
@@ -1391,9 +1391,11 @@ bool MultiROM::flashZip(std::string rom, std::string file)
 	// Installer, it will take over the screen and buttons and we won't be able to manually wake the screen
 	blankTimer.resetTimerAndUnblank();
 
-	dp_keep_busy[0] = opendir("/cache");
-	dp_keep_busy[1] = opendir("/system");
-	dp_keep_busy[2] = opendir("/data");
+	if (1) { // (DataManager::GetIntValue("tw_multirom_InstallZIP_BlockUnmount") != 0) {
+		dp_keep_busy[0] = opendir("/cache");
+		dp_keep_busy[1] = opendir("/system");
+		dp_keep_busy[2] = opendir("/data");
+	}
 
 	DataManager::SetValue(TW_SIGNED_ZIP_VERIFY_VAR, 0);
 	status = TWinstall_zip(file.c_str(), &wipe_cache);
@@ -1465,9 +1467,11 @@ bool MultiROM::flashORSZip(std::string file, int *wipe_cache)
 
 	blankTimer.resetTimerAndUnblank(); // same as above (about AROMA Installer)
 
-	dp_keep_busy[0] = opendir("/cache");
-	dp_keep_busy[1] = opendir("/system");
-	dp_keep_busy[2] = opendir("/data");
+	if (1) { // (DataManager::GetIntValue("tw_multirom_InstallZIP_BlockUnmount") != 0) {
+		dp_keep_busy[0] = opendir("/cache");
+		dp_keep_busy[1] = opendir("/system");
+		dp_keep_busy[2] = opendir("/data");
+	}
 
 	DataManager::SetValue(TW_SIGNED_ZIP_VERIFY_VAR, 0);
 	status = TWinstall_zip(file.c_str(), wipe_cache);
